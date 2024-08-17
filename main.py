@@ -3,7 +3,13 @@ def main():
     body_text = get_book_contents(book_path)
     words = get_number_of_words(body_text)
     characters = get_character_counts(body_text)
-    print(characters)
+    report = generate_word_and_character_report(characters)
+    print(f"--- Begin report of {book_path} ---")
+    print(f"{words} words found in the document")
+    print()
+    for dict in report:
+        print(f"The '{dict['char']}' character was found {dict['num']} times")
+    print("--- End report ---")
 
 
 def get_book_contents(path):
@@ -36,4 +42,20 @@ def get_character_counts(body_text):
         else:
             char[lower] = 1
     return char
+
+def generate_word_and_character_report(character_dict):
+    list_of_dicts = []
+    for k in character_dict:
+        if k.isalpha():
+            list_of_dicts.append({
+                "char" : k,
+                "num" : character_dict[k]
+                })
+    def sort_on(dict):
+        return dict["num"]
+    list_of_dicts.sort(reverse=True, key=sort_on)
+
+    return list_of_dicts
+    # for dict in list_of_dicts:
+    #     (f"The '{dict['char']}' character was found {dict['num']} times")
 main()
